@@ -1,3 +1,5 @@
+console.time('Score Games')
+
 let games = `A Y
 A Y
 B X
@@ -2501,10 +2503,36 @@ A Y`
 
 
 
-
 let gamesArray = games.split('\n')
 
 console.log(gamesArray)
+
+function misScoreGames(){
+    let matchPoints = 0
+    const drawDict = {
+        A: 1,
+        X: 1,
+        B: 2,
+        Y: 2,
+        C: 3,
+        Z: 3,
+    }
+    gamesArray.forEach(game =>{
+        let match = game.split(' ')
+        let challengerChoice = drawDict[match[0]]
+        let myChoice = drawDict[match[1]]
+        let diff = Math.abs(challengerChoice - myChoice) // use diff to find out if its a standard pair or looped pair
+        if (challengerChoice === myChoice){
+            matchPoints += myChoice + 3
+        }
+        else if ((diff === 1 && challengerChoice < myChoice) || (challengerChoice === 3 && myChoice === 1)){
+            matchPoints += myChoice + 6
+        } else {
+            matchPoints += myChoice
+        }
+    })
+    return matchPoints
+}
 
 function scoreGames(){
     let matchPoints = 0
@@ -2566,5 +2594,6 @@ function scoreGames(){
     });
     return matchPoints;
 }
-
+console.log(misScoreGames())
 console.log(scoreGames())
+console.timeEnd('Score Games')
