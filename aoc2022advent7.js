@@ -1,3 +1,19 @@
+/* 
+Advent of Code 2022: Day 7
+
+Gist: Parse a set of commands to get the system file structure.
+Part 1:
+Find all of the directories with a total size of at most 100000. 
+What is the sum of the total sizes of those directories?
+
+Part 2:
+Find the smallest directory that, if deleted, would free up enough space on the filesystem to run an update. 
+What is the total size of that directory?
+
+Full instructions: https://adventofcode.com/2022/day/7
+
+*/
+
 let input = `$ cd /
 $ ls
 dir a
