@@ -2,13 +2,13 @@
 Advent of Code 2022: Day 7
 
 Gist: Parse a set of commands to get the system file structure.
-Part 1:
-Find all of the directories with a total size of at most 100000. 
-What is the sum of the total sizes of those directories?
+    Part 1:
+    Find all of the directories with a total size of at most 100000. 
+    What is the sum of the total sizes of those directories?
 
-Part 2:
-Find the smallest directory that, if deleted, would free up enough space on the filesystem to run an update. 
-What is the total size of that directory?
+    Part 2:
+    Find the smallest directory that, if deleted, would free up enough space on the filesystem to run an update. 
+    What is the total size of that directory?
 
 Full instructions: https://adventofcode.com/2022/day/7
 
@@ -38,6 +38,7 @@ $ ls
 5626152 d.ext
 7214296 k`
 
+// add a count to values to make them unique (for duplicate folder names)
 Object.defineProperties(Array.prototype, {
     count: {
         value: function(value) {
@@ -67,6 +68,7 @@ let smallSum = 0
 let longFolderlist = []
 let getFoldersArray = []
 
+// Parse the files and folders from string
 const getFileFolders = (str) => {
     let regexp = /[a-z]+\n\$ ls/g;
     let matches = str.match(regexp)
@@ -80,6 +82,8 @@ const getFileFolders = (str) => {
 
     return folderNames
 }
+
+// Get the contents of a folder
 const getFolderContents = (str, folder, index) => {
         let regex1 = folder
         let regex2 = new RegExp("\\n\\$\\sls\\n((\\n|.)*?)(\\$|$)",'g')
@@ -94,6 +98,7 @@ const getFolderContents = (str, folder, index) => {
         }
 }
 
+// Get the files in a folder
 const getFiles = (folder) => {
         let fileFolders = folder.folderContents.split("\n")
         let files = []
@@ -114,8 +119,8 @@ const getFiles = (folder) => {
         return folder.files
 
 }
-const timeout = ms => new Promise(resolve => setTimeout(resolve, ms));
 
+// Get the folders in a folder
 const getFolders = (folder) => {
     let fileFolders = folder.folderContents.split("\n")
     let folders = []
@@ -157,6 +162,7 @@ const getFolders = (folder) => {
     return folder.folders
 }
 
+// Sum the file sizes
 const sumFileSize = (files) => {
         let sum = 0
         if(Object.keys(files).length > 0){
@@ -166,6 +172,8 @@ const sumFileSize = (files) => {
         }
         return sum
 }
+
+// Sum the folder sizes
 const sumFolderSize = (folders) => {
         let sum = 0
         if(Object.keys(folders).length > 0){
@@ -176,6 +184,7 @@ const sumFolderSize = (folders) => {
         return sum
 }
 
+// Map the system and out put the object starting at the root
 const mapSystem = (str) => {
     let systemObj = Object.create(systemSchema)
     let folderNames = getFileFolders(str)
@@ -208,22 +217,16 @@ const mapSystem = (str) => {
     return systemObj.folders[0]
 }
 
-function findNestedObj(entireObj, keyToFind, valToFind) {
-    let foundObj;
-    JSON.stringify(entireObj, (_, nestedValue) => {
-      if (nestedValue && nestedValue[keyToFind] === valToFind) {
-        foundObj = nestedValue;
-      }
-      return nestedValue;
-    });
-    return foundObj;
-  };
 const systemObj = mapSystem(input)
 
+// Print the system object
 console.log(systemObj)
 
+// Print the the sum of the total sizes of directories under 100000
 console.log({"Answer 1": fileSizes.filter(x=>x<100000).reduce((partialSum, a) => partialSum + a, 0)})
 
+
+// Part 2
 const diskSpace = 70000000
 const updateReq = 30000000
 const startingAvailable = diskSpace - systemObj.folderSize
